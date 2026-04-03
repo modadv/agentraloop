@@ -1,0 +1,27 @@
+{
+  "id": "smoke-pipeline-chain-check",
+  "name": "Smoke Pipeline Chain Check",
+  "description": "Minimal two-node pipeline used to verify sequential execution and markdown prompt chaining.",
+  "entryNodeId": "smoke-source",
+  "nodes": [
+    {
+      "id": "smoke-source",
+      "name": "Smoke Source",
+      "provider": "codex-cli",
+      "model": "gpt-5.4",
+      "prompt": "You are the first node in a smoke-test pipeline. Do not modify any files. Return only Markdown. Your response must contain exactly these lines:\n# Smoke Output\nTOKEN: PIPELINE_SMOKE_TOKEN_20260324\nSTATUS: SOURCE_OK\nSUMMARY: This markdown should be forwarded to the next node.",
+      "cwd": "."
+    },
+    {
+      "id": "smoke-verify",
+      "name": "Smoke Verify",
+      "provider": "codex-cli",
+      "model": "gpt-5.4",
+      "prompt": "You are the second node in a smoke-test pipeline. Read the previous node output appended below this prompt. Do not modify any files. Return only Markdown. Your response must contain:\n1. A heading '# Smoke Verification'\n2. A line 'TOKEN_SEEN: <copied token>' where the token is copied exactly from the previous node output\n3. A line 'CHAINING: OK' if the token PIPELINE_SMOKE_TOKEN_20260324 is present, otherwise 'CHAINING: FAILED'\n4. A line 'SOURCE_STATUS: <copied source status>' copied from the previous node output",
+      "cwd": "."
+    }
+  ],
+  "edges": [
+    { "from": "smoke-source", "to": "smoke-verify" }
+  ]
+}

@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+.npm/
+
+.codex
+.editorconfig
+.github/workflows/ci.yml
+
+# Build output
+dist/
+public/app/
+.vitepress/cache/
+.vitepress/dist/
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+*.tsbuildinfo
+
+# Test scratch
+test/tmp/
+coverage/
+
+# Runtime logs
+logs/
+*.log
+
+# Runtime data and locks
+data/
+!data/.gitkeep
+
+# User-scoped runtime state
+users/
+!users/.gitkeep
+
+# External/default runtime workspaces
+runtime-workspaces/
+!runtime-workspaces/.gitkeep
+
+# OS/editor noise
+.codex/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

@@ -1,0 +1,63 @@
+{
+  "id": "default-software-delivery-pipeline",
+  "name": "Default Software Delivery Pipeline",
+  "description": "MVP sequential pipeline composed entirely of Agent invocation nodes.",
+  "entryNodeId": "task-intake",
+  "nodes": [
+    {
+      "id": "task-intake",
+      "name": "Task Intake",
+      "provider": "claude-agent-sdk",
+      "model": "opus[1m]",
+      "prompt": "You are the task intake agent for a software delivery pipeline. Read the available project context and produce a Markdown briefing for the next agent. Include: objective, constraints, current repository context, and execution advice.",
+      "cwd": "."
+    },
+    {
+      "id": "implementation",
+      "name": "Implementation",
+      "provider": "codex-cli",
+      "model": "gpt-5.4",
+      "prompt": "You are the implementation agent. Based on the project context and the previous node output, perform the required development work in the repository. Return Markdown summarizing what you changed, key files touched, unresolved risks, and any commands you ran.",
+      "cwd": "."
+    },
+    {
+      "id": "review",
+      "name": "Review",
+      "provider": "claude-agent-sdk",
+      "model": "opus[1m]",
+      "prompt": "You are the code review agent. Review the current repository state and the previous node output. Return Markdown with findings, severity, residual risks, and a release recommendation.",
+      "cwd": "."
+    },
+    {
+      "id": "test",
+      "name": "Test",
+      "provider": "codex-cli",
+      "model": "gpt-5.4",
+      "prompt": "You are the verification agent. Run or coordinate the relevant tests for the current repository state. Return Markdown containing test scope, commands run, pass/fail status, and notable failures or gaps.",
+      "cwd": "."
+    },
+    {
+      "id": "commit",
+      "name": "Commit",
+      "provider": "claude-agent-sdk",
+      "model": "opus[1m]",
+      "prompt": "You are the commit agent. Inspect the repository state and previous node output. If the work is ready, create the appropriate git commit(s). Return Markdown with commit summary, commit SHA(s), and any final warnings.",
+      "cwd": "."
+    },
+    {
+      "id": "build",
+      "name": "Build",
+      "provider": "codex-cli",
+      "model": "gpt-5.4",
+      "prompt": "You are the build agent. Build the software from the current repository state and return Markdown summarizing build commands, outputs, artifact locations, and any blockers.",
+      "cwd": "."
+    }
+  ],
+  "edges": [
+    { "from": "task-intake", "to": "implementation" },
+    { "from": "implementation", "to": "review" },
+    { "from": "review", "to": "test" },
+    { "from": "test", "to": "commit" },
+    { "from": "commit", "to": "build" }
+  ]
+}

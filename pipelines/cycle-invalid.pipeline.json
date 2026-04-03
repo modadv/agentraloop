@@ -1,0 +1,28 @@
+  {
+    "id": "cycle-invalid-check",
+    "name": "Cycle Invalid Check",
+    "description": "Minimal invalid pipeline used to verify DAG cycle detection.",
+    "entryNodeId": "node-a",
+    "nodes": [
+      {
+        "id": "node-a",
+        "name": "Node A",
+        "provider": "codex-cli",
+        "model": "gpt-5.4",
+        "prompt": "Return markdown: node a",
+        "cwd": "."
+      },
+      {
+        "id": "node-b",
+        "name": "Node B",
+        "provider": "codex-cli",
+        "model": "gpt-5.4",
+        "prompt": "Return markdown: node b",
+        "cwd": "."
+      }
+    ],
+    "edges": [
+      { "from": "node-a", "to": "node-b" },
+      { "from": "node-b", "to": "node-a" }
+    ]
+  }

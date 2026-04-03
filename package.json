@@ -1,0 +1,89 @@
+{
+  "name": "agentraloop",
+  "version": "0.2.0",
+  "description": "Agent-centric pipeline runtime and web studio for orchestrating AI work.",
+  "main": "dist/main.js",
+  "bin": {
+    "agentraloop": "./bin/agentraloop.js"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "public/app",
+    "pipelines/default.pipeline.json"
+  ],
+  "scripts": {
+    "clean": "node -e \"const { rmSync } = require('node:fs'); const remove = (path) => { try { rmSync(path, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 }); } catch (error) { const code = error && typeof error === 'object' ? error.code : ''; if (code === 'EPERM' || code === 'EACCES' || code === 'EBUSY') { console.warn('[clean] skipping ' + path + ': ' + (error.message || String(error))); return; } throw error; } }; remove('dist'); remove('public/app');\"",
+    "build": "npm run clean && tsc && vite build --config vite.config.mjs --configLoader native",
+    "build:web": "npm run clean && vite build --config vite.config.mjs --configLoader native",
+    "typecheck": "tsc --noEmit",
+    "lint": "npm run typecheck",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "docs:generate": "npm run docs:build",
+    "docs:site": "npm run docs:build && npm run docs:preview",
+    "test": "npm run build && node --test --experimental-test-isolation=none",
+    "verify": "npm run lint && npm test && npm run docs:build",
+    "start": "node dist/main.js",
+    "dev": "node --loader ts-node/esm src/main.ts",
+    "serve": "node --loader ts-node/esm src/server.ts",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm test"
+  },
+  "keywords": [
+    "agents",
+    "automation",
+    "cli",
+    "orchestration",
+    "pipelines"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "engines": {
+    "node": ">=20.11"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/modadv/agentraloop.git"
+  },
+  "bugs": {
+    "url": "https://github.com/modadv/agentraloop/issues"
+  },
+  "homepage": "https://github.com/modadv/agentraloop#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@radix-ui/react-slot": "^1.2.4",
+    "@tailwindcss/vite": "^4.2.2",
+    "@types/node": "^25.5.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "clsx": "^2.1.1",
+    "dockview": "^5.2.0",
+    "logger": "^0.0.1",
+    "mermaid": "10.9.5",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "reactflow": "^11.11.4",
+    "rete": "^2.0.6",
+    "rete-area-plugin": "^2.1.5",
+    "rete-connection-plugin": "^2.0.5",
+    "rete-react-plugin": "^2.1.0",
+    "rete-render-utils": "^2.0.3",
+    "styled-components": "^6.3.12",
+    "tailwind-merge": "^3.5.0",
+    "tailwindcss": "^4.2.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.2",
+    "vite": "^8.0.3",
+    "vitepress": "^1.6.4"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "0.2.90",
+    "@openai/codex-sdk": "^0.118.0"
+  }
+}

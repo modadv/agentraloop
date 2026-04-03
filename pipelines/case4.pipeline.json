@@ -1,0 +1,48 @@
+{
+  "id": "case4-development-flow-check",
+  "name": "Case 4 Development Flow Check",
+  "description": "A shorter non-destructive validation pipeline for richer semantic chaining under the fast model profile.",
+  "entryNodeId": "task-intake",
+  "nodes": [
+    {
+      "id": "task-intake",
+      "name": "Task Intake",
+      "provider": "codex-cli",
+      "model": "gpt-5.4",
+      "modelProfiles": {
+        "fast": "gpt-5.4-mini",
+        "standard": "gpt-5.4"
+      },
+      "prompt": "You are the task intake agent for a development pipeline validation run. Do not modify any files. Do not start nested pipeline runs. Do not invoke npm start, node dist/main.js, node dist/server.js, or any command that executes this pipeline again. Inspect the current repository and return only Markdown with exactly these sections: '# Task Brief', '## Objective', '## Relevant Files', '## Suggested Next Step'. The objective must be: 'Validate the generalized agent pipeline on the current codebase without making code changes.'",
+      "cwd": "."
+    },
+    {
+      "id": "implementation-plan",
+      "name": "Implementation Plan",
+      "provider": "codex-cli",
+      "model": "gpt-5.4",
+      "modelProfiles": {
+        "fast": "gpt-5.4-mini",
+        "standard": "gpt-5.4"
+      },
+      "prompt": "You are the implementation planning agent for a safe validation run. Read the previous node output and inspect the repository. Do not modify any files. Do not start nested pipeline runs. Do not invoke npm start, node dist/main.js, node dist/server.js, or any command that executes this pipeline again. Return only Markdown with exactly these sections: '# Implementation Plan', '## Intake Objective Seen', '## Candidate Files', '## No-Change Plan'. In '## Intake Objective Seen', copy the objective from the previous node output exactly. In '## No-Change Plan', state that this is a dry-run validation and no file changes are being applied.",
+      "cwd": "."
+    },
+    {
+      "id": "final-validation",
+      "name": "Final Validation",
+      "provider": "codex-cli",
+      "model": "gpt-5.4",
+      "modelProfiles": {
+        "fast": "gpt-5.4-mini",
+        "standard": "gpt-5.4"
+      },
+      "prompt": "You are the final validation agent for a safe validation run. Read the previous node output and inspect the repository. Do not modify any files. Do not start nested pipeline runs. Do not invoke npm start, node dist/main.js, node dist/server.js, or any command that executes this pipeline again. Return only Markdown with exactly these sections: '# Final Validation', '## Objective Preserved', '## Plan Understood', '## Outcome'. In '## Objective Preserved', explicitly confirm whether the original intake objective was preserved. In '## Plan Understood', explicitly mention whether the previous node stated that no file changes would be applied. In '## Outcome', include the line 'PIPELINE_CASE4_STATUS: OK' only if both conditions were successfully verified from the previous node output.",
+      "cwd": "."
+    }
+  ],
+  "edges": [
+    { "from": "task-intake", "to": "implementation-plan" },
+    { "from": "implementation-plan", "to": "final-validation" }
+  ]
+}

@@ -1,0 +1,37 @@
+
+  {
+    "id": "crud-test-pipeline",
+    "name": "CRUD Test Pipeline",
+    "description": "Minimal pipeline for validating pipeline CRUD and run event APIs.",
+    "entryNodeId": "start",
+    "nodes": [
+      {
+        "id": "start",
+        "name": "Start",
+        "provider": "codex-cli",
+        "model": "gpt-5.4",
+        "modelProfiles": {
+          "fast": "gpt-5.4-mini",
+          "standard": "gpt-5.4"
+        },
+        "prompt": "You are the start node of a CRUD test pipeline. Do not modify any files. Return only Markdown with exactly these lines:\n# CRUD Start\nTOKEN: CRUD_TEST_TOKEN_20260325\nSTATUS: START_OK",
+        "cwd": "."
+      },
+      {
+        "id": "finish",
+        "name": "Finish",
+        "provider": "codex-cli",
+        "model": "gpt-5.4",
+        "modelProfiles": {
+          "fast": "gpt-5.4-mini",
+          "standard": "gpt-5.4"
+        },
+        "prompt": "You are the finish node of a CRUD test pipeline. Read the upstream output. Do not modify any files. Return only Markdown with exactly these lines:\n# CRUD Finish\nTOKEN_SEEN: <copied token>\nCRUD_TEST_STATUS: OK if CRUD_TEST_TOKEN_20260325 is present, otherwise
+  FAILED",
+        "cwd": "."
+      }
+    ],
+    "edges": [
+      { "from": "start", "to": "finish" }
+    ]
+  }

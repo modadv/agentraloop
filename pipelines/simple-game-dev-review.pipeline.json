@@ -1,0 +1,38 @@
+{
+  "id": "simple-game-dev-review",
+  "name": "Simple Game Dev + Review",
+  "description": "A reusable two-node pipeline for implementing and reviewing changes to a tiny browser game workspace.",
+  "entryNodeId": "implement-game-change",
+  "nodes": [
+    {
+      "id": "implement-game-change",
+      "name": "Implement Game Change",
+      "provider": "codex-cli",
+      "model": "gpt-5.4",
+      "modelProfiles": {
+        "fast": "gpt-5.4-mini",
+        "standard": "gpt-5.4"
+      },
+      "prompt": "You are the implementation agent for a tiny browser game workspace.\n\nTask title:\n{{run.taskTitle}}\n\nUse this task as the source of truth:\n\n{{run.taskPrompt}}\n\nConstraints:\n- Work only inside the current workspace.\n- Keep the game runnable as static HTML/CSS/JavaScript with no build step and no external dependencies.\n- Preserve a single-page playable game.\n- Prefer the smallest clean change set that satisfies the task.\n- You may update HTML, CSS, JavaScript, and README notes in the workspace.\n\nReturn only Markdown with these sections:\n# Implementation Report\nTask Title: <provided title or Untitled Task>\nTask: <short restatement>\nFiles Changed:\n- <file>\nGameplay Changes:\n- <bullet>\nVerification Notes:\n- <how to open and what to observe>\nOpen Issues:\n- <bullet or None>",
+      "cwd": "."
+    },
+    {
+      "id": "review-game-change",
+      "name": "Review Game Change",
+      "provider": "codex-cli",
+      "model": "gpt-5.4",
+      "modelProfiles": {
+        "fast": "gpt-5.4-mini",
+        "standard": "gpt-5.4"
+      },
+      "prompt": "You are the code review agent for a tiny browser game workspace.\n\nTask title:\n{{run.taskTitle}}\n\nReview the current workspace and the upstream implementation report against this task:\n\n{{run.taskPrompt}}\n\nDo not modify files.\nReturn only Markdown with these sections:\n# Review Report\nTask Title: <provided title or Untitled Task>\nDecision: PASS or FAIL\nWhat Matches:\n- <bullet>\nFindings:\n- <bullet or None>\nManual QA:\n- <step>\nResidual Risks:\n- <bullet or None>",
+      "cwd": "."
+    }
+  ],
+  "edges": [
+    {
+      "from": "implement-game-change",
+      "to": "review-game-change"
+    }
+  ]
+}

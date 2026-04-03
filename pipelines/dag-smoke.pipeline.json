@@ -1,0 +1,62 @@
+{
+  "id": "dag-smoke-graph-check",
+  "name": "DAG Smoke Graph Check",
+  "description": "Minimal DAG validation pipeline covering one-to-many fan-out and many-to-one fan-in with markdown aggregation.",
+  "entryNodeId": "source",
+  "nodes": [
+    {
+      "id": "source",
+      "name": "Source",
+      "provider": "codex-cli",
+      "model": "gpt-5.4",
+      "modelProfiles": {
+        "fast": "gpt-5.4-mini",
+        "standard": "gpt-5.4"
+      },
+      "prompt": "You are the source node in a DAG smoke-test pipeline. Do not modify any files. Return only Markdown with exactly these lines:\n# DAG Source\nTOKEN: DAG_SMOKE_TOKEN_20260325\nSOURCE_STATUS: OK\nNEXT: branch-a and branch-b must both see this token.",
+      "cwd": "."
+    },
+    {
+      "id": "branch-a",
+      "name": "Branch A",
+      "provider": "codex-cli",
+      "model": "gpt-5.4",
+      "modelProfiles": {
+        "fast": "gpt-5.4-mini",
+        "standard": "gpt-5.4"
+      },
+      "prompt": "You are branch A in a DAG smoke-test pipeline. Read the aggregated upstream outputs. Do not modify any files. Return only Markdown with exactly these lines:\n# Branch A\nBRANCH_A_TOKEN_SEEN: <copied token>\nBRANCH_A_STATUS: OK if the token DAG_SMOKE_TOKEN_20260325 is present, otherwise FAILED",
+      "cwd": "."
+    },
+    {
+      "id": "branch-b",
+      "name": "Branch B",
+      "provider": "codex-cli",
+      "model": "gpt-5.4",
+      "modelProfiles": {
+        "fast": "gpt-5.4-mini",
+        "standard": "gpt-5.4"
+      },
+      "prompt": "You are branch B in a DAG smoke-test pipeline. Read the aggregated upstream outputs. Do not modify any files. Return only Markdown with exactly these lines:\n# Branch B\nBRANCH_B_TOKEN_SEEN: <copied token>\nBRANCH_B_STATUS: OK if the token DAG_SMOKE_TOKEN_20260325 is present, otherwise FAILED",
+      "cwd": "."
+    },
+    {
+      "id": "merge",
+      "name": "Merge",
+      "provider": "codex-cli",
+      "model": "gpt-5.4",
+      "modelProfiles": {
+        "fast": "gpt-5.4-mini",
+        "standard": "gpt-5.4"
+      },
+      "prompt": "You are the merge node in a DAG smoke-test pipeline. Read all aggregated upstream outputs. Do not modify any files. Return only Markdown with exactly these lines:\n# DAG Merge\nMERGE_SAW_BRANCH_A: YES if branch A output is present, otherwise NO\nMERGE_SAW_BRANCH_B: YES if branch B output is present, otherwise NO\nMERGE_TOKEN: <copied token>\nDAG_SMOKE_STATUS: OK only if both branch outputs are present and both branch statuses are OK; otherwise FAILED",
+      "cwd": "."
+    }
+  ],
+  "edges": [
+    { "from": "source", "to": "branch-a" },
+    { "from": "source", "to": "branch-b" },
+    { "from": "branch-a", "to": "merge" },
+    { "from": "branch-b", "to": "merge" }
+  ]
+}

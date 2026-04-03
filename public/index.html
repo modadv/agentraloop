@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agent Pipeline Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/app/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <div class="brand">
+          <div class="brand-mark">AP</div>
+          <div>
+            <p class="eyebrow">Control Plane</p>
+            <h1>Agent Pipeline Studio</h1>
+            <p id="heroMeta" class="hero-meta">Choose a pipeline or run to inspect graph state and event flow.</p>
+          </div>
+        </div>
+        <div class="hero-side">
+          <h2 id="heroTitle">No Run Selected</h2>
+          <div class="hero-actions">
+            <span id="actionStatus" class="badge muted">Idle</span>
+            <button id="refreshSelection" class="ghost">Refresh Selection</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="studio-grid">
+        <section class="panel library-panel">
+          <div class="panel-head">
+            <h2>Pipelines</h2>
+            <button id="refreshPipelines" class="ghost">Refresh</button>
+          </div>
+          <div id="pipelineList" class="stack"></div>
+        </section>
+
+        <section class="panel activity-panel">
+          <div class="panel-head">
+            <h2>Runs</h2>
+            <button id="refreshRuns" class="ghost">Refresh</button>
+          </div>
+          <div id="runList" class="stack"></div>
+        </section>
+
+        <section class="panel control-panel">
+          <div class="panel-head">
+            <h2>Run Controls</h2>
+            <span id="controlBadge" class="badge muted">Ready</span>
+          </div>
+          <div class="control-grid">
+            <label class="field">
+              <span>Pipeline</span>
+              <select id="pipelineSelect"></select>
+            </label>
+            <label class="field">
+              <span>Workspace</span>
+              <input id="pipelineCwdInput" type="text" placeholder="." />
+            </label>
+            <label class="field">
+              <span>Model Profile</span>
+              <select id="modelProfileSelect">
+                <option value="fast">fast</option>
+                <option value="standard">standard</option>
+              </select>
+            </label>
+            <div class="control-actions">
+              <button id="createRun" class="primary">Create Run</button>
+              <button id="pauseRun" class="ghost">Pause</button>
+              <button id="resumeRun" class="ghost">Resume</button>
+              <button id="cancelRun" class="ghost">Cancel</button>
+              <button id="retryRun" class="ghost">Retry</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel editor-panel">
+          <div class="panel-head">
+            <h2>Pipeline Editor</h2>
+            <span id="editorBadge" class="badge muted">Idle</span>
+          </div>
+          <div class="editor-meta">
+            <span id="editorTarget" class="editor-target">No pipeline selected</span>
+            <div class="editor-actions">
+              <button id="loadEditor" class="ghost">Load Draft</button>
+              <button id="validateEditor" class="ghost">Validate</button>
+              <button id="saveEditor" class="primary">Save</button>
+            </div>
+          </div>
+          <div class="editor-workbench">
+            <section class="editor-column editor-library">
+              <div class="panel-head compact-head">
+                <h2>Nodes</h2>
+                <button id="addNode" class="ghost">Add Node</button>
+              </div>
+              <div id="editorNodeList" class="stack compact-stack"></div>
+
+              <div class="panel-head compact-head top-gap">
+                <h2>Edges</h2>
+                <button id="addEdge" class="ghost">Add Edge</button>
+              </div>
+              <div id="editorEdgeList" class="stack compact-stack"></div>
+            </section>
+
+            <section class="editor-column editor-inspector">
+              <div class="panel-head compact-head">
+                <h2>Node Inspector</h2>
+                <span id="editorNodeBadge" class="badge muted">No node</span>
+              </div>
+              <div class="editor-form-grid">
+                <label class="field">
+                  <span>Node Id</span>
+                  <input id="editorNodeId" type="text" />
+                </label>
+                <label class="field">
+                  <span>Node Name</span>
+                  <input id="editorNodeName" type="text" />
+                </label>
+                <label class="field">
+                  <span>Provider</span>
+                  <select id="editorNodeProvider">
+                    <option value="codex-cli">codex-cli</option>
+                    <option value="claude-agent-sdk">claude-agent-sdk</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Model</span>
+                  <input id="editorNodeModel" type="text" />
+                </label>
+                <label class="field">
+                  <span>Workspace</span>
+                  <input id="editorNodeCwd" type="text" />
+                </label>
+                <label class="field">
+                  <span>Timeout Ms</span>
+                  <input id="editorNodeTimeout" type="number" min="0" step="1000" />
+                </label>
+                <label class="field check-field">
+                  <span>Enabled</span>
+                  <input id="editorNodeEnabled" type="checkbox" />
+                </label>
+                <label class="field check-field">
+                  <span>Entry Node</span>
+                  <input id="editorNodeIsEntry" type="checkbox" />
+                </label>
+                <label class="field editor-prompt-field">
+                  <span>Prompt</span>
+                  <textarea id="editorNodePrompt" class="editor-textarea compact-textarea" spellcheck="false"></textarea>
+                </label>
+              </div>
+              <div class="editor-actions top-gap">
+                <button id="removeNode" class="ghost">Remove Node</button>
+              </div>
+            </section>
+          </div>
+          <label class="field editor-field top-gap">
+            <span>Advanced Draft JSON</span>
+            <textarea id="editorDraft" class="editor-textarea" spellcheck="false"></textarea>
+          </label>
+          <div id="editorIssues" class="issue-list empty-state compact-empty">
+            Select a pipeline to load its editable graph draft.
+          </div>
+        </section>
+
+        <section class="panel graph-panel">
+          <div class="panel-head">
+            <h2>Graph</h2>
+            <span id="graphBadge" class="badge muted">No data</span>
+          </div>
+          <div id="graphCanvas" class="graph-canvas empty-state">
+            Select a pipeline or run to render the graph.
+          </div>
+        </section>
+
+        <section class="panel details-panel">
+          <div class="panel-head">
+            <h2>Selection</h2>
+            <span id="selectionBadge" class="badge muted">Idle</span>
+          </div>
+          <pre id="selectionDetails" class="code-view">No selection</pre>
+        </section>
+
+        <section class="panel timeline-panel">
+          <div class="panel-head">
+            <h2>Run Timeline</h2>
+            <span id="timelineBadge" class="badge muted">No events</span>
+          </div>
+          <div id="timeline" class="timeline empty-state">Select a run to load events.</div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="/app/app.js"></script>
+  </body>
+</html>

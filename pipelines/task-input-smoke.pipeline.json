@@ -1,0 +1,35 @@
+{
+  "id": "task-input-smoke-check",
+  "name": "Task Input Smoke Check",
+  "description": "Minimal pipeline for verifying run-level taskTitle/taskPrompt injection.",
+  "entryNodeId": "task-echo",
+  "nodes": [
+    {
+      "id": "task-echo",
+      "name": "Task Echo",
+      "provider": "codex-cli",
+      "model": "gpt-5.4",
+      "modelProfiles": {
+        "fast": "gpt-5.4-mini",
+        "standard": "gpt-5.4"
+      },
+      "prompt": "You are the first node in a run-input smoke pipeline. Do not modify any files. Return only Markdown with exactly these lines:\n# Task Input Echo\nTITLE: {{run.taskTitle}}\nTASK: {{run.taskPrompt}}\nSTATUS: INPUT_RECEIVED",
+      "cwd": "."
+    },
+    {
+      "id": "task-verify",
+      "name": "Task Verify",
+      "provider": "codex-cli",
+      "model": "gpt-5.4",
+      "modelProfiles": {
+        "fast": "gpt-5.4-mini",
+        "standard": "gpt-5.4"
+      },
+      "prompt": "You are the second node in a run-input smoke pipeline. Read the upstream node output appended below this prompt. Do not modify any files. Return only Markdown with exactly these lines:\n# Task Input Verification\nTITLE_SEEN: <copied task title>\nTASK_SEEN: <copied task text>\nCHAINING: OK if both the task title and task text are present, otherwise FAILED\nSOURCE_STATUS: <copied source status>",
+      "cwd": "."
+    }
+  ],
+  "edges": [
+    { "from": "task-echo", "to": "task-verify" }
+  ]
+}

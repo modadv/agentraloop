@@ -1,0 +1,707 @@
+:root {
+  --bg: #09111f;
+  --panel: rgba(12, 24, 43, 0.82);
+  --panel-strong: rgba(16, 31, 56, 0.96);
+  --panel-border: rgba(123, 176, 255, 0.18);
+  --text: #eaf2ff;
+  --muted: #97abc8;
+  --accent: #62d0ff;
+  --accent-2: #91ffca;
+  --danger: #ff7a90;
+  --warning: #ffd479;
+  --success: #7af0a6;
+  --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+  --surface: rgba(255, 255, 255, 0.04);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  font-family: "IBM Plex Sans", sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(98, 208, 255, 0.16), transparent 32%),
+    radial-gradient(circle at top right, rgba(145, 255, 202, 0.12), transparent 28%),
+    linear-gradient(180deg, #0b1324 0%, #08101d 55%, #050912 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  mask-image: linear-gradient(180deg, rgba(255, 255, 255, 0.35), transparent 88%);
+}
+
+.app-shell {
+  min-height: 100vh;
+  padding: 20px;
+  display: grid;
+  gap: 18px;
+}
+
+.brand {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  font-family: "Archivo Expanded", sans-serif;
+  color: #04111f;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 10px 30px rgba(98, 208, 255, 0.25);
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+}
+
+h1,
+h2 {
+  margin: 0;
+}
+
+h1 {
+  font-family: "Archivo Expanded", sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  min-width: 0;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stack {
+  display: grid;
+  gap: 12px;
+}
+
+.list-card {
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+
+.list-card:hover,
+.list-card.active {
+  transform: translateY(-1px);
+  border-color: rgba(98, 208, 255, 0.45);
+  background: rgba(98, 208, 255, 0.08);
+}
+
+.list-card strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 24px;
+  padding: 24px 28px;
+  border: 1px solid var(--panel-border);
+  border-radius: 28px;
+  background:
+    linear-gradient(135deg, rgba(98, 208, 255, 0.12), rgba(145, 255, 202, 0.06)),
+    var(--panel-strong);
+  box-shadow: var(--shadow);
+}
+
+.hero h2 {
+  font-family: "Archivo Expanded", sans-serif;
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.hero-meta {
+  margin: 8px 0 0;
+  max-width: 720px;
+  color: var(--muted);
+}
+
+.compact-head {
+  margin-bottom: 12px;
+}
+
+.top-gap {
+  margin-top: 14px;
+}
+
+.hero-side {
+  display: grid;
+  gap: 12px;
+  align-content: space-between;
+  justify-items: end;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.studio-grid {
+  display: grid;
+  grid-template-columns: minmax(250px, 310px) minmax(360px, 1.2fr) minmax(300px, 380px);
+  grid-template-areas:
+    "pipelines controls details"
+    "runs graph timeline"
+    "editor graph timeline";
+  gap: 18px;
+  align-items: start;
+}
+
+.library-panel {
+  grid-area: pipelines;
+}
+
+.activity-panel {
+  grid-area: runs;
+}
+
+.control-panel {
+  grid-area: controls;
+  padding: 20px 24px;
+}
+
+.editor-panel {
+  grid-area: editor;
+  padding: 20px 24px;
+}
+
+.editor-workbench {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.editor-column {
+  padding: 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.025);
+  min-width: 0;
+}
+
+.compact-stack {
+  gap: 10px;
+}
+
+.editor-item {
+  width: 100%;
+  text-align: left;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.editor-item.active,
+.editor-item:hover {
+  border-color: rgba(98, 208, 255, 0.38);
+  background: rgba(98, 208, 255, 0.08);
+}
+
+.editor-item code {
+  color: var(--accent-2);
+  font-size: 12px;
+}
+
+.editor-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.check-field {
+  align-content: end;
+}
+
+.check-field input {
+  width: 20px;
+  height: 20px;
+}
+
+.editor-prompt-field {
+  grid-column: 1 / -1;
+}
+
+.control-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  align-items: end;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.field span {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  border-radius: 14px;
+  padding: 12px 14px;
+  font: inherit;
+}
+
+.field input:focus,
+.field select:focus {
+  outline: 2px solid rgba(98, 208, 255, 0.35);
+  outline-offset: 2px;
+}
+
+.control-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  grid-column: 1 / -1;
+}
+
+.editor-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.editor-target {
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.editor-field {
+  margin-bottom: 14px;
+}
+
+.editor-textarea {
+  width: 100%;
+  min-height: 280px;
+  resize: vertical;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(4, 10, 18, 0.84);
+  color: #c9dcff;
+  border-radius: 18px;
+  padding: 16px;
+  font: 12px/1.55 "IBM Plex Sans", sans-serif;
+}
+
+.compact-textarea {
+  min-height: 160px;
+}
+
+.editor-textarea:focus {
+  outline: 2px solid rgba(98, 208, 255, 0.35);
+  outline-offset: 2px;
+}
+
+.issue-list {
+  display: grid;
+  gap: 10px;
+}
+
+.issue-card {
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 122, 144, 0.22);
+  background: rgba(255, 122, 144, 0.08);
+}
+
+.issue-card strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.issue-card small {
+  display: block;
+  color: var(--warning);
+  margin-bottom: 6px;
+}
+
+.compact-empty {
+  min-height: 96px;
+}
+
+.graph-panel,
+.details-panel,
+.timeline-panel {
+  padding: 20px;
+}
+
+.graph-panel {
+  grid-area: graph;
+  min-height: 720px;
+}
+
+.details-panel {
+  grid-area: details;
+}
+
+.timeline-panel {
+  grid-area: timeline;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.badge.muted {
+  color: var(--muted);
+}
+
+.badge.success {
+  color: var(--success);
+  border-color: rgba(122, 240, 166, 0.28);
+}
+
+.badge.failed {
+  color: var(--danger);
+  border-color: rgba(255, 122, 144, 0.28);
+}
+
+.badge.running {
+  color: var(--accent);
+  border-color: rgba(98, 208, 255, 0.28);
+}
+
+.ghost {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 9px 14px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.ghost:hover {
+  border-color: rgba(98, 208, 255, 0.4);
+}
+
+.primary {
+  appearance: none;
+  border: 1px solid rgba(98, 208, 255, 0.3);
+  background: linear-gradient(135deg, rgba(98, 208, 255, 0.24), rgba(145, 255, 202, 0.18));
+  color: var(--text);
+  border-radius: 999px;
+  padding: 9px 16px;
+  font: inherit;
+  cursor: pointer;
+  box-shadow: 0 10px 28px rgba(98, 208, 255, 0.16);
+}
+
+.primary:hover {
+  border-color: rgba(98, 208, 255, 0.52);
+}
+
+.ghost:disabled,
+.primary:disabled,
+.field input:disabled,
+.field select:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.graph-canvas {
+  display: grid;
+  gap: 18px;
+}
+
+.graph-column {
+  display: grid;
+  gap: 12px;
+}
+
+.graph-column-label {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.graph-node {
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.graph-node header {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.graph-node p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.edge-map {
+  display: grid;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.edge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(98, 208, 255, 0.08);
+  color: var(--accent);
+  font-size: 12px;
+}
+
+.code-view {
+  margin: 0;
+  padding: 14px;
+  min-height: 260px;
+  max-height: 560px;
+  overflow: auto;
+  border-radius: 18px;
+  background: rgba(4, 10, 18, 0.84);
+  color: #c9dcff;
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.timeline {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.timeline-item {
+  position: relative;
+  padding: 12px 14px 12px 22px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 16px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 6px rgba(98, 208, 255, 0.12);
+}
+
+.timeline-item strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.timeline-item small {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.timeline-item .code-view {
+  min-height: 0;
+  max-height: 220px;
+  margin-top: 8px;
+}
+
+.empty-state {
+  display: grid;
+  place-items: center;
+  min-height: 220px;
+  color: var(--muted);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+}
+
+@media (max-width: 1180px) {
+  .studio-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "pipelines runs"
+      "controls controls"
+      "editor editor"
+      "details timeline"
+      "graph graph"
+      ;
+  }
+
+  .graph-panel {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 860px) {
+  .app-shell {
+    padding: 12px;
+  }
+
+  .hero {
+    padding: 18px;
+    flex-direction: column;
+  }
+
+  .hero-side {
+    justify-items: start;
+  }
+
+  .hero-actions {
+    justify-content: flex-start;
+  }
+
+  .studio-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "pipelines"
+      "runs"
+      "controls"
+      "editor"
+      "graph"
+      "details"
+      "timeline";
+  }
+
+  .control-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-workbench,
+  .editor-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panel,
+  .hero {
+    border-radius: 20px;
+  }
+
+  .editor-textarea,
+  .code-view {
+    min-height: 220px;
+  }
+}
+
+@media (max-width: 560px) {
+  .brand {
+    align-items: flex-start;
+  }
+
+  .brand-mark {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+  }
+
+  h1 {
+    font-size: 1rem;
+  }
+
+  .hero h2 {
+    font-size: 1.15rem;
+  }
+
+  .panel-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .editor-meta {
+    align-items: flex-start;
+  }
+
+  .editor-actions {
+    width: 100%;
+  }
+}
