@@ -4,7 +4,6 @@ node_modules/
 
 .codex
 .editorconfig
-.github/workflows/ci.yml
 
 # Build output
 dist/
